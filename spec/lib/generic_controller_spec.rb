@@ -1,4 +1,6 @@
+require 'generic_controller'
 RSpec.describe GenericController do
+  controller = nil
   before(:all) do
     module Bongo; end
     class FooBarBaz; end

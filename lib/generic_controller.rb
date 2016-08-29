@@ -1,5 +1,7 @@
 # GenericController: Generic, scope-oriented resource controller functions
+require 'action_controller'
 class GenericController < ActionController::Base
+  VERSION = "0.0.1"
   VALID_SORT = %w(asc desc).freeze
 
   def create
