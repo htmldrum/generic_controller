@@ -1,4 +1,4 @@
-# Generic Controller [![Build Status](https://secure.travis-ci.org/htmldrum/generic_controller.png?branch=master)](http://travis-ci.org/htmldrum/generic_controller)
+# Generic Controller [![Build Status](https://travis-ci.org/htmldrum/generic_controller.svg?branch=master)](https://travis-ci.org/htmldrum/generic_controller)
 
 ## Installation
 
