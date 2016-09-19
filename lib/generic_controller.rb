@@ -57,17 +57,22 @@ class GenericController < ActionController::Base
     l = limit.to_i
     p = page.to_i
     o = order_by.to_sym
+    off = offset.to_sym
     s = sort.to_sym
     respond_to do |f|
       f.any do
         render({
-                 json: query.order(o => s).page(p).per(l),
+                 json: query.order(o => s)
+                   .page(p)
+                   .per(l)
+                   .offset(off),
                  meta: {
                    total: query.count(:all),
                    page: p,
                    limit: l,
                    order_by: o,
-                   sort: s
+                   sort: s,
+                   offset: off
                  },
                  each_serializer: each_sez,
                  status: :ok
@@ -86,18 +91,22 @@ class GenericController < ActionController::Base
     "#{norm_controller_name}Serializer".constantize
   end
 
-  def page
-    params[:page] ||= 1
-  end
-
   def limit
     params[:limit] ||= 20
+  end
+
+  def offset
+    params[:offset] ||= 0
   end
 
   def order_by
     return params[:order_by] if model.column_names.include?(params[:order_by])
 
     'id'
+  end
+
+  def page
+    params[:page] ||= 1
   end
 
   def sort
@@ -117,7 +126,14 @@ class GenericController < ActionController::Base
   end
 
   def cscope
-    model
+    cs = model
+    cs = cs.where(['updated_at >= ?', parse_time(params[:updated_since])]) if params[:updated_since]
+    cs = cs.where(['created_at >= ?', parse_time(params[:created_since])]) if params[:created_since]
+    cs
+  end
+
+  def parse_time(s)
+    Time.zone.parse(s)
   end
 
   def attach_resource
