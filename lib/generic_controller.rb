@@ -57,15 +57,13 @@ class GenericController < ActionController::Base
     l = limit.to_i
     p = page.to_i
     o = order_by.to_sym
-    off = offset.to_sym
     s = sort.to_sym
     respond_to do |f|
       f.any do
         render({
                  json: query.order(o => s)
                    .page(p)
-                   .per(l)
-                   .offset(off),
+                   .per(l),
                  meta: {
                    total: query.count(:all),
                    page: p,
@@ -93,10 +91,6 @@ class GenericController < ActionController::Base
 
   def limit
     params[:limit] ||= 20
-  end
-
-  def offset
-    params[:offset] ||= 0
   end
 
   def order_by
