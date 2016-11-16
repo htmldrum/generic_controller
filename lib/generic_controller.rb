@@ -118,11 +118,11 @@ class GenericController < ActionController::Base
   def model
     model_name.constantize
   end
-
+  
   def cscope
     cs = model
-    cs = cs.where(['updated_at >= ?', parse_time(params[:updated_since])]) if params[:updated_since]
-    cs = cs.where(['created_at >= ?', parse_time(params[:created_since])]) if params[:created_since]
+    cs = cs.where(model.arel_table[:updated_at].gteq(parse_time(params[:updated_since]))) if params[:updated_since]
+    cs = cs.where(model.arel_table[:created_at].gteq(parse_time(params[:created_since]))) if params[:created_since]
     cs
   end
 
